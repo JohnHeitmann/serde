@@ -82,7 +82,6 @@ fn deserialize_body(
     impl_generics: &ast::Generics,
     ty: P<ast::Ty>,
 ) -> P<ast::Expr> {
-
     let container_attrs = field::container_attrs(cx, item);
 
     match item.node {

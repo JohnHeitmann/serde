@@ -982,6 +982,7 @@ impl Deserialize for IgnoredAny {
                 while let Some((_, _)) = try!(visitor.visit::<String, IgnoredAny>()) {
                     // Gobble
                 }
+
                 try!(visitor.end());
                 Ok(IgnoredAny)
             }

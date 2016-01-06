@@ -22,4 +22,3 @@ pub fn container_attrs(
 ) -> ContainerAttrs {
     ContainerAttrsBuilder::new().attrs(container.attrs()).build()
 }
-
