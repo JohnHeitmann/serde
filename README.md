@@ -593,6 +593,7 @@ how types are serialized. Here are the supported annotations:
 | `#[serde(skip_serializing)`                  | Do not serialize this value                                    |
 | `#[serde(skip_serializing_if_empty)`         | Do not serialize this value if `$value.is_empty()` is `true`   |
 | `#[serde(skip_serializing_if_none)`          | Do not serialize this value if `$value.is_none()` is `true`    |
+| `#[serde(skip_deserializing_unknown)`        | Ignore unknown fields during deserialization when possible  |
 
 Serialization Formats Using Serde
 =================================
