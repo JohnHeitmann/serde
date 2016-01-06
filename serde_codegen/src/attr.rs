@@ -28,72 +28,6 @@ pub struct FieldAttrs {
     use_default: bool,
 }
 
-// TODO: Rename to ItemAttrs?
-/// Represents container (e.g. struct) attribute information
-#[derive(Debug)]
-pub struct ContainerAttrs {
-    skip_deserializing_unknown: bool,
-}
-
-impl ContainerAttrs {
-    pub fn skip_deserializing_unknown(&self) -> bool {
-        self.skip_deserializing_unknown
-    }
-}
-
-// TODO: Simplify away this builder?
-pub struct ContainerAttrsBuilder {
-    skip_deserializing_unknown: bool,
-}
-
-impl ContainerAttrsBuilder {
-    pub fn new() -> ContainerAttrsBuilder {
-        ContainerAttrsBuilder {
-            skip_deserializing_unknown: false,
-        }
-    }
-
-    pub fn attrs(self, attrs: &[ast::Attribute]) -> ContainerAttrsBuilder {
-        attrs.iter().fold(self, ContainerAttrsBuilder::attr)
-    }
-
-    pub fn attr(self, attr: &ast::Attribute) -> ContainerAttrsBuilder {
-        match attr.node.value.node {
-            ast::MetaList(ref name, ref items) if name == &"serde" => {
-                attr::mark_used(&attr);
-                items.iter().fold(self, ContainerAttrsBuilder::meta_item)
-            }
-            _ => {
-                self
-            }
-        }
-    }
-
-    pub fn meta_item(self, meta_item: &P<ast::MetaItem>) -> ContainerAttrsBuilder {
-        match meta_item.node {
-            ast::MetaWord(ref name) if name == &"skip_deserializing_unknown" => {
-                self.skip_deserializing_unknown()
-            }
-            _ => {
-                // Ignore unknown meta variables for now.
-                self
-            }
-        }
-    }
-
-    pub fn skip_deserializing_unknown(mut self) -> ContainerAttrsBuilder {
-        self.skip_deserializing_unknown = true;
-        self
-    }
-
-    pub fn build(self) -> ContainerAttrs {
-        ContainerAttrs {
-            skip_deserializing_unknown: self.skip_deserializing_unknown,
-        }
-    }
-}
-
-
 impl FieldAttrs {
     /// Return a set of formats that the field has attributes for.
     pub fn formats(&self) -> HashSet<P<ast::Expr>> {
@@ -306,6 +240,69 @@ impl<'a> FieldAttrsBuilder<'a> {
             skip_serializing_field_if_none: self.skip_serializing_field_if_none,
             names: names,
             use_default: self.use_default,
+        }
+    }
+}
+
+/// Represents container (e.g. struct) attribute information
+#[derive(Debug)]
+pub struct ContainerAttrs {
+    disallow_unknown: bool,
+}
+
+impl ContainerAttrs {
+    pub fn disallow_unknown(&self) -> bool {
+        self.disallow_unknown
+    }
+}
+
+pub struct ContainerAttrsBuilder {
+    disallow_unknown: bool,
+}
+
+impl ContainerAttrsBuilder {
+    pub fn new() -> ContainerAttrsBuilder {
+        ContainerAttrsBuilder {
+            disallow_unknown: false,
+        }
+    }
+
+    pub fn attrs(self, attrs: &[ast::Attribute]) -> ContainerAttrsBuilder {
+        attrs.iter().fold(self, ContainerAttrsBuilder::attr)
+    }
+
+    pub fn attr(self, attr: &ast::Attribute) -> ContainerAttrsBuilder {
+        match attr.node.value.node {
+            ast::MetaList(ref name, ref items) if name == &"serde" => {
+                attr::mark_used(&attr);
+                items.iter().fold(self, ContainerAttrsBuilder::meta_item)
+            }
+            _ => {
+                self
+            }
+        }
+    }
+
+    pub fn meta_item(self, meta_item: &P<ast::MetaItem>) -> ContainerAttrsBuilder {
+        match meta_item.node {
+            ast::MetaWord(ref name) if name == &"disallow_unknown" => {
+                self.disallow_unknown()
+            }
+            _ => {
+                // Ignore unknown meta variables for now.
+                self
+            }
+        }
+    }
+
+    pub fn disallow_unknown(mut self) -> ContainerAttrsBuilder {
+        self.disallow_unknown = true;
+        self
+    }
+
+    pub fn build(self) -> ContainerAttrs {
+        ContainerAttrs {
+            disallow_unknown: self.disallow_unknown,
         }
     }
 }
