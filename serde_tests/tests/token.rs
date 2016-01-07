@@ -850,8 +850,6 @@ pub fn assert_de_tokens_ignore(ignorable_tokens: Vec<Token<'static>>) {
     assert_eq!(de.tokens.next(), None);
 }
 
-
-
 pub fn assert_tokens<T>(value: &T, tokens: Vec<Token<'static>>)
     where T: ser::Serialize + de::Deserialize + PartialEq + fmt::Debug,
 {
