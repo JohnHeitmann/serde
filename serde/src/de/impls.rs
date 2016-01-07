@@ -979,7 +979,7 @@ impl Deserialize for IgnoredAny {
             fn visit_map<V>(&mut self, mut visitor: V) -> Result<IgnoredAny, V::Error>
                 where V: MapVisitor,
             {
-                while let Some((_, _)) = try!(visitor.visit::<String, IgnoredAny>()) {
+                while let Some((_, _)) = try!(visitor.visit::<IgnoredAny, IgnoredAny>()) {
                     // Gobble
                 }
 
