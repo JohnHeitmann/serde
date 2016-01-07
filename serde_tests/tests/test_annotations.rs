@@ -105,7 +105,7 @@ fn test_ignore_unknown() {
     assert_de_tokens(
         &Default { a1: 1, a2: 2},
         vec![
-            Token::StructStart("Default", Some(3)),
+            Token::StructStart("Default", Some(5)),
 
             Token::MapSep,
             Token::Str("whoops1"),
