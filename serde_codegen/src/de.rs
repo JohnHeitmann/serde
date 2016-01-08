@@ -544,10 +544,8 @@ fn deserialize_item_enum(
         builder,
         enum_def.variants.iter()
             .map(|variant| {
-                let expr = builder.expr().str(variant.node.name);
-                 attr::FieldAttrsBuilder::new(builder)
-                    .name(expr)
-                    .default()
+                attr::FieldAttrsBuilder::new(builder)
+                    .variant(variant)
                     .build()
             })
             .collect(),
